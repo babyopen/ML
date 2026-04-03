@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-生肖预测模型应用入口点
+简化的生肖预测模型应用入口点
 """
 
 import http.server
@@ -31,6 +31,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 [sys.executable, '-c', '''
 import pandas as pd
 import numpy as np
+import pickle
 import json
 import os
 
