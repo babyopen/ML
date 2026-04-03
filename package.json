@@ -1,0 +1,22 @@
+{
+  "name": "zodiac-predictor",
+  "version": "1.0.0",
+  "description": "生肖预测模型部署在Vercel平台",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel deploy",
+    "build": "echo 'Build completed'"
+  },
+  "keywords": [
+    "machine-learning",
+    "predictor",
+    "zodiac",
+    "vercel"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "vercel": "^32.5.0"
+  }
+}

@@ -1,0 +1,120 @@
+[
+  {
+    "id": "20260403090831",
+    "timestamp": "2026-04-03 09:08:31",
+    "target_period": 2026093,
+    "predictions": [
+      {
+        "id": 1,
+        "name": "马",
+        "prob": 0.08333333333333333,
+        "element": "火",
+        "color": "红"
+      },
+      {
+        "id": 2,
+        "name": "蛇",
+        "prob": 0.08333333333333333,
+        "element": "火",
+        "color": "蓝"
+      },
+      {
+        "id": 3,
+        "name": "龙",
+        "prob": 0.08333333333333333,
+        "element": "土",
+        "color": "红"
+      },
+      {
+        "id": 4,
+        "name": "兔",
+        "prob": 0.08333333333333333,
+        "element": "木",
+        "color": "绿"
+      },
+      {
+        "id": 5,
+        "name": "虎",
+        "prob": 0.08333333333333333,
+        "element": "木",
+        "color": "蓝"
+      },
+      {
+        "id": 6,
+        "name": "牛",
+        "prob": 0.08333333333333333,
+        "element": "土",
+        "color": "绿"
+      },
+      {
+        "id": 7,
+        "name": "鼠",
+        "prob": 0.08333333333333333,
+        "element": "水",
+        "color": "红"
+      },
+      {
+        "id": 8,
+        "name": "猪",
+        "prob": 0.08333333333333333,
+        "element": "水",
+        "color": "蓝"
+      },
+      {
+        "id": 9,
+        "name": "狗",
+        "prob": 0.08333333333333333,
+        "element": "土",
+        "color": "绿"
+      },
+      {
+        "id": 10,
+        "name": "鸡",
+        "prob": 0.08333333333333333,
+        "element": "金",
+        "color": "红"
+      },
+      {
+        "id": 11,
+        "name": "猴",
+        "prob": 0.08333333333333333,
+        "element": "金",
+        "color": "蓝"
+      },
+      {
+        "id": 12,
+        "name": "羊",
+        "prob": 0.08333333333333333,
+        "element": "土",
+        "color": "绿"
+      }
+    ],
+    "top3": [
+      {
+        "rank": 1,
+        "name": "马",
+        "probability": 0.08333333333333333,
+        "element": "火",
+        "color": "红"
+      },
+      {
+        "rank": 2,
+        "name": "蛇",
+        "probability": 0.08333333333333333,
+        "element": "火",
+        "color": "蓝"
+      },
+      {
+        "rank": 3,
+        "name": "龙",
+        "probability": 0.08333333333333333,
+        "element": "土",
+        "color": "红"
+      }
+    ],
+    "status": "pending",
+    "actual_zodiac": null,
+    "is_correct": null,
+    "checked_at": null
+  }
+]

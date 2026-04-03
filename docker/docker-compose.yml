@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  zodiac-prediction:
+    build: .
+    container_name: zodiac-prediction
+    restart: unless-stopped
+    ports:
+      - "6000:8000"
+    volumes:
+      - ../data/lottery_history_recalculated.csv:/app/data/lottery_history_recalculated.csv
+      - ../models/zodiac_model.pkl:/app/models/zodiac_model.pkl
+      - ../web/predict.html:/app/web/predict.html
+      - ../data/prediction_history.json:/app/data/prediction_history.json
+    environment:
+      - TZ=Asia/Shanghai
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import pandas, numpy, sklearn; print('OK')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s

@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>ML模型预测结果</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(180deg, #7B68EE 0%, #6B5CE7 50%, #5A4BD1 100%);
+            min-height: 100vh;
+            padding: 16px;
+            color: white;
+        }
+        .container { max-width: 100%; margin: 0 auto; }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding: 0 4px;
+        }
+        .header-title {
+            font-size: clamp(1rem, 4vw, 1.3rem);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .header-icon { font-size: 1.2rem; }
+        .header-time {
+            font-size: clamp(0.75rem, 2.5vw, 0.9rem);
+            opacity: 0.85;
+        }
+        
+        .latest-card {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(245, 158, 11, 0.2) 100%);
+            border: 1px solid rgba(251, 191, 36, 0.4);
+        }
+        .latest-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        .latest-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .latest-period {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        .latest-zodiac {
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            font-weight: bold;
+            color: #FBBF24;
+            text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+        }
+        .latest-attrs {
+            font-size: clamp(0.8rem, 2.5vw, 0.95rem);
+            opacity: 0.85;
+        }
+        .latest-badge {
+            background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+            color: #78350F;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(147, 51, 234, 0.15) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        .stats-grid {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            gap: 8px;
+            margin-top: 8px;
+            width: 100%;
+        }
+        .stat-item {
+            flex: 1;
+            min-width: 0;
+            text-align: center;
+            padding: 8px 4px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        .stat-label {
+            font-size: clamp(0.65rem, 2vw, 0.75rem);
+            opacity: 0.8;
+            margin-bottom: 2px;
+            white-space: nowrap;
+        }
+        .stat-value {
+            font-size: clamp(1rem, 4vw, 1.4rem);
+            font-weight: bold;
+            color: #60A5FA;
+            white-space: nowrap;
+        }
+        .stat-value.highlight { color: #4ADE80; }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .control-card {
+            background: linear-gradient(135deg, rgba(74, 222, 128, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+        }
+        .control-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .control-title {
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: clamp(0.75rem, 2.5vw, 0.9rem);
+        }
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #9CA3AF;
+            transition: all 0.3s ease;
+        }
+        .status-dot.ready { background: #4ADE80; box-shadow: 0 0 10px #4ADE80; }
+        .status-dot.running {
+            background: #FBBF24;
+            box-shadow: 0 0 10px #FBBF24;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+        
+        .action-button {
+            position: relative;
+            width: 100%;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 14px;
+            font-size: clamp(0.95rem, 3vw, 1.1rem);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            overflow: hidden;
+        }
+        .action-button.ready {
+            background: linear-gradient(135deg, #4ADE80 0%, #22C55E 100%);
+            color: #064E3B;
+            box-shadow: 0 4px 15px rgba(74, 222, 128, 0.4);
+        }
+        .action-button.ready:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.5);
+        }
+        .action-button.running {
+            background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+            color: #78350F;
+            cursor: not-allowed;
+        }
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0,0,0,0.1);
+            border-top: 3px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        .action-button.running .spinner { display: block; }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .progress-container {
+            display: none;
+            margin-top: 12px;
+        }
+        .progress-container.show { display: block; }
+        .progress-bar-bg {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            height: 10px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4ADE80 0%, #22C55E 100%);
+            border-radius: 8px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .confidence-section { margin-bottom: 8px; }
+        .confidence-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .confidence-label {
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .confidence-badge {
+            background: #4ADE80;
+            color: #064E3B;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+            font-weight: 600;
+        }
+        .confidence-bar-container {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            height: 12px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        .confidence-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4ADE80 0%, #22C55E 100%);
+            border-radius: 8px;
+            transition: width 0.8s ease;
+        }
+        .confidence-info {
+            text-align: center;
+            font-size: clamp(0.8rem, 2.5vw, 0.95rem);
+            opacity: 0.9;
+        }
+        
+        .top3-header {
+            font-size: clamp(0.85rem, 3vw, 1rem);
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .top3-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .top-item {
+            flex: 1;
+            min-width: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 14px 8px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .top-item:first-child {
+            background: rgba(74, 222, 128, 0.25);
+            border: 2px solid #4ADE80;
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
+        }
+        .top-item:first-child::after {
+            content: '✓';
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 18px;
+            height: 18px;
+            background: #4ADE80;
+            color: #064E3B;
+            border-radius: 50%;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .top-rank {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            margin: 0 auto 8px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .top-item:first-child .top-rank {
+            background: #FFD700;
+            color: #92400E;
+        }
+        .top-item:nth-child(2) .top-rank {
+            background: #C0C0C0;
+            color: #4B5563;
+        }
+        .top-item:nth-child(3) .top-rank {
+            background: #CD7F32;
+            color: white;
+        }
+        .top-name {
+            font-size: clamp(1.3rem, 4vw, 1.6rem);
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        .top-attrs {
+            font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+            opacity: 0.85;
+            margin-bottom: 10px;
+        }
+        .top-bar-container {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            height: 6px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        .top-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #FBBF24 0%, #F59E0B 100%);
+            border-radius: 4px;
+            transition: width 0.8s ease;
+        }
+        .top-prob {
+            font-size: clamp(0.95rem, 3vw, 1.1rem);
+            font-weight: bold;
+        }
+        
+        .analysis-section { margin-top: 16px; }
+        .analysis-header {
+            font-size: clamp(0.85rem, 3vw, 1rem);
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .analysis-list {
+            list-style: none;
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+            opacity: 0.9;
+            line-height: 1.8;
+        }
+        .analysis-list li {
+            padding-left: 12px;
+            position: relative;
+        }
+        .analysis-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #4ADE80;
+        }
+        
+        .all-section { margin-top: 16px; }
+        .all-header {
+            font-size: clamp(0.85rem, 3vw, 1rem);
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .all-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        @media (min-width: 480px) {
+            .all-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+        @media (min-width: 768px) {
+            .all-grid { grid-template-columns: repeat(6, 1fr); }
+        }
+        .all-item {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 10px 6px;
+            text-align: center;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        .all-item.highlight {
+            background: rgba(74, 222, 128, 0.2);
+            border: 1px solid #4ADE80;
+        }
+        .all-item.highlight::after {
+            content: '★';
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            font-size: 8px;
+            color: #4ADE80;
+        }
+        .all-name {
+            font-size: clamp(0.85rem, 2.8vw, 1rem);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .all-prob {
+            font-size: clamp(0.7rem, 2.2vw, 0.8rem);
+            opacity: 0.85;
+            margin-bottom: 6px;
+        }
+        .all-bar-container {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 3px;
+            height: 4px;
+            overflow: hidden;
+        }
+        .all-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #60A5FA 0%, #3B82F6 100%);
+            border-radius: 3px;
+            transition: width 0.8s ease;
+        }
+        .all-item.highlight .all-bar {
+            background: linear-gradient(90deg, #FBBF24 0%, #F59E0B 100%);
+        }
+        
+        .history-card {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+        .history-header-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .history-title {
+            font-size: clamp(0.85rem, 3vw, 1rem);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .history-item {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 10px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .history-item.correct {
+            border-color: rgba(74, 222, 128, 0.5);
+            background: rgba(74, 222, 128, 0.1);
+        }
+        .history-item.wrong {
+            border-color: rgba(239, 68, 68, 0.5);
+            background: rgba(239, 68, 68, 0.1);
+        }
+        .history-item.pending {
+            border-color: rgba(251, 191, 36, 0.5);
+            background: rgba(251, 191, 36, 0.1);
+        }
+        .history-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+        }
+        .history-info-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+        }
+        .history-time {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            white-space: nowrap;
+        }
+        .period-badge {
+            background: rgba(96, 165, 250, 0.3);
+            color: #60A5FA;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .status-badge {
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .status-badge.pending {
+            background: rgba(251, 191, 36, 0.3);
+            color: #FBBF24;
+        }
+        .status-badge.correct {
+            background: rgba(74, 222, 128, 0.3);
+            color: #4ADE80;
+        }
+        .status-badge.wrong {
+            background: rgba(239, 68, 68, 0.3);
+            color: #FCA5A5;
+        }
+        .history-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 0;
+        }
+        .history-prediction,
+        .history-actual {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            min-width: 0;
+        }
+        .pred-label,
+        .actual-label {
+            opacity: 0.7;
+            flex-shrink: 0;
+        }
+        .pred-value,
+        .actual-value {
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            min-width: 0;
+        }
+        .actual-zodiac {
+            font-weight: bold;
+            color: #60A5FA;
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(107, 92, 231, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            opacity: 0.6;
+        }
+        .nav-icon { font-size: 1.3rem; }
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 10px 32px;
+            border-radius: 24px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .bottom-spacer { height: 80px; }
+        
+        /* 删除确认对话框 */
+        .delete-dialog-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .delete-dialog-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .delete-dialog {
+            background: linear-gradient(135deg, #7B68EE 0%, #6B5CE7 100%);
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 90%;
+            width: 320px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+        .delete-dialog-overlay.show .delete-dialog {
+            transform: translateY(0);
+        }
+        .delete-dialog-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .delete-dialog-message {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-bottom: 24px;
+            text-align: center;
+            line-height: 1.4;
+        }
+        .delete-dialog-buttons {
+            display: flex;
+            gap: 12px;
+        }
+        .delete-dialog-btn {
+            flex: 1;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .delete-dialog-btn.cancel {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        .delete-dialog-btn.cancel:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        .delete-dialog-btn.confirm {
+            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+            color: white;
+        }
+        .delete-dialog-btn.confirm:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+        }
+        
+        /* 长按效果 */
+        .history-item {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        .history-item.long-press {
+            background: rgba(239, 68, 68, 0.2) !important;
+            border-color: rgba(239, 68, 68, 0.5) !important;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .card { animation: fadeIn 0.5s ease forwards; }
+        .card:nth-child(2) { animation-delay: 0.1s; }
+        .card:nth-child(3) { animation-delay: 0.2s; }
+        .card:nth-child(4) { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-title">
+                <span class="header-icon">🤖</span>
+                <span>ML模型预测结果</span>
+            </div>
+            <div class="header-time">预测时间: 2026/04/03 09:08:31</div>
+        </div>
+        
+        <div class="card latest-card">
+            <div class="latest-content">
+                <div class="latest-info">
+                    <div class="latest-period">期 2026092</div>
+                    <div class="latest-zodiac">牛</div>
+                    <div class="latest-attrs">五行: 土 · 波色: 绿</div>
+                </div>
+                <div class="latest-badge">🎉 最新开奖</div>
+            </div>
+        </div>
+        
+        <div class="card stats-card">
+            <div class="control-header">
+                <div class="control-title">
+                    <span>📊</span>
+                    <span>预测统计</span>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-label">总预测</div>
+                    <div class="stat-value">1</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">已核对</div>
+                    <div class="stat-value">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">命中</div>
+                    <div class="stat-value highlight">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">准确率</div>
+                    <div class="stat-value highlight">0.0%</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card control-card">
+            <div class="control-section">
+                <div class="control-header">
+                    <div class="control-title">
+                        <span>⚡</span>
+                        <span>模式控制</span>
+                    </div>
+                    <div class="status-indicator">
+                        <div class="status-dot ready" id="statusDot"></div>
+                        <span class="status-text" id="statusText">就绪</span>
+                    </div>
+                </div>
+                <button class="action-button ready" id="actionButton" onclick="handleAction()">
+                    <span class="spinner"></span>
+                    <span id="btnText">▶ 启动预测</span>
+                </button>
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="confidence-section">
+                <div class="confidence-header">
+                    <div class="confidence-label">
+                        <span>🎯</span>
+                        <span>预测置信度</span>
+                    </div>
+                    <div class="confidence-badge">✓ 高</div>
+                </div>
+                <div class="confidence-bar-container">
+                    <div class="confidence-bar" style="width: 12.5%;"></div>
+                </div>
+                <div class="confidence-info">
+                    置信度: 12.50% | 推荐生肖: 马 (火·红)
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="top3-header">
+                <span>🏆</span>
+                <span>Top 3 推荐</span>
+            </div>
+            <div class="top3-container">
+                <div class="top-item">
+                    <div class="top-rank">1</div>
+                    <div class="top-name">马</div>
+                    <div class="top-attrs">火·红</div>
+                    <div class="top-bar-container">
+                        <div class="top-bar" style="width: 100.0%;"></div>
+                    </div>
+                    <div class="top-prob">8.33%</div>
+                </div>
+                <div class="top-item">
+                    <div class="top-rank">2</div>
+                    <div class="top-name">蛇</div>
+                    <div class="top-attrs">火·蓝</div>
+                    <div class="top-bar-container">
+                        <div class="top-bar" style="width: 100.0%;"></div>
+                    </div>
+                    <div class="top-prob">8.33%</div>
+                </div>
+                <div class="top-item">
+                    <div class="top-rank">3</div>
+                    <div class="top-name">龙</div>
+                    <div class="top-attrs">土·红</div>
+                    <div class="top-bar-container">
+                        <div class="top-bar" style="width: 100.0%;"></div>
+                    </div>
+                    <div class="top-prob">8.33%</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="analysis-section">
+                <div class="analysis-header">
+                    <span>💡</span>
+                    <span>预测分析</span>
+                </div>
+                <ul class="analysis-list">
+                    <li>马 的预测概率为 8.33%，在所有生肖中排名最高</li>
+                    <li>与第二名 蛇 的概率差距为 0.00%</li>
+                    <li>该生肖五行属火，对应红</li>
+                    <li>模型基于历史数据统计、时序特征和五行波色关联进行预测</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="all-section">
+                <div class="all-header">
+                    <span>📊</span>
+                    <span>所有生肖概率分布</span>
+                </div>
+                <div class="all-grid">
+                    <div class="all-item highlight">
+                        <div class="all-name">马</div>
+                        <div class="all-prob">8.3%</div>
+                        <div class="all-bar-container">
+                            <div class="all-bar" style="width: 100.0%;"></div>
+                        </div>
+                    </div>
+                    <div class="all-item ">
+                        <div class="all-name">蛇</div>
+                        <div class="all-prob">8.3%</div>
+                        <div class="all-bar-container">
+                            <div class="all-bar" style="width: 100.0%;"></div>
+                        </div>
+                    </div>
+                    <div class="all-item ">
+                        <div class="all-name">龙</div>
+                        <div class="all-prob">8.3%</div>
+                        <div class="all-bar-container">
+                            <div class="all-bar" style="width: 100.0%;"></div>
+                        </div>
+                    </div>
+                    <div class="all-item ">
+                        <div class="all-name">兔</div>
+                        <div class="all-prob">8.3%</div>
+                        <div class="all-bar-container">
+                            <div class="all-bar" style="width: 100.0%;"></div>
+                        </div>
+                    </div>
+                    <div class="all-item ">
+                        <div class="all-name">虎</div>
+                        <div class="all-prob">8.3%</div>
+                        <div class="all-bar-container">
+                            <div class="all-bar" style="width: 100.0%;"></div>
+                        </div>
+                    </div>
+                    <div class="all-item ">
+                        <div class="all-name">牛</div>
+                        <div class="all-prob">8.3%</div>
+                        <div class="all-bar-container">
+                            <div class="all-bar" style="width: 100.0%;"></div>
+                        </div>
+                    </div>
+                    <div class="all-item ">
+                        <div class="all-name">鼠</div>
+                        <div class="all-prob">8.3%</div>
+                        <div class="all-bar-container">
+                            <div class="all-bar" style="width: 100.0%;"></div>
+                        </div>
+                    </div>
+                    <div class="all-item ">
+                        <div class="all-name">猪</div>
+                        <div class="all-prob">8.3%</div>
+                        <div class="all-bar-container">
+                            <div class="all-bar" style="width: 100.0%;"></div>
+                        </div>
+                    </div>
+                    <div class="all-item ">
+                        <div class="all-name">狗</div>
+                        <div class="all-prob">8.3%</div>
+                        <div class="all-bar-container">
+                            <div class="all-bar" style="width: 100.0%;"></div>
+                        </div>
+                    </div>
+                    <div class="all-item ">
+                        <div class="all-name">鸡</div>
+                        <div class="all-prob">8.3%</div>
+                        <div class="all-bar-container">
+                            <div class="all-bar" style="width: 100.0%;"></div>
+                        </div>
+                    </div>
+                    <div class="all-item ">
+                        <div class="all-name">猴</div>
+                        <div class="all-prob">8.3%</div>
+                        <div class="all-bar-container">
+                            <div class="all-bar" style="width: 100.0%;"></div>
+                        </div>
+                    </div>
+                    <div class="all-item ">
+                        <div class="all-name">羊</div>
+                        <div class="all-prob">8.3%</div>
+                        <div class="all-bar-container">
+                            <div class="all-bar" style="width: 100.0%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card history-card">
+            <div class="history-header-card">
+                <div class="history-title">
+                    <span>📜</span>
+                    <span>预测历史</span>
+                </div>
+            </div>
+            <div class="history-list">
+                <div class="history-item pending">
+                    <div class="history-header">
+                        <div class="history-info-row">
+                            <div class="history-time">2026-04-03 09:08:31</div>
+                            <span class='period-badge'>期 2026093</span>
+                        </div>
+                        <span class='status-badge pending'>待开奖</span>
+                    </div>
+                    <div class="history-content">
+                        <div class="history-prediction">
+                            <span class="pred-label">预测:</span>
+                            <span class="pred-value">马、蛇、龙</span>
+                        </div>
+                        <div class="history-actual">
+                            <span class="actual-label">实际:</span>
+                            <span class="actual-value">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bottom-spacer"></div>
+    </div>
+    
+    <div class="bottom-nav">
+        <div class="nav-item">
+            <span class="nav-icon">☰</span>
+            <span class="nav-label">菜单</span>
+        </div>
+        <button class="nav-btn" onclick="location.reload()">分析</button>
+        <div class="nav-item">
+            <span class="nav-icon">⚙</span>
+            <span class="nav-label">设置</span>
+        </div>
+    </div>
+    
+    <!-- 删除确认对话框 -->
+    <div class="delete-dialog-overlay" id="deleteDialogOverlay">
+        <div class="delete-dialog">
+            <div class="delete-dialog-title">删除确认</div>
+            <div class="delete-dialog-message">确定要删除这条预测记录吗？此操作不可恢复。</div>
+            <div class="delete-dialog-buttons">
+                <button class="delete-dialog-btn cancel" onclick="closeDeleteDialog()">取消</button>
+                <button class="delete-dialog-btn confirm" onclick="confirmDelete()">确认</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function handleAction() {
+            const btn = document.getElementById('actionButton');
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+            
+            btn.className = 'action-button running';
+            btn.disabled = true;
+            statusDot.className = 'status-dot running';
+            statusText.textContent = '运行中';
+            progressContainer.classList.add('show');
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                progressBar.style.width = progress + '%';
+            }, 200);
+            
+            // 调用API进行预测
+            fetch('/api/predict')
+                .then(response => response.json())
+                .then(data => {
+                    clearInterval(interval);
+                    progressBar.style.width = '100%';
+                    
+                    if (data.success) {
+                        updatePredictionResults(data);
+                    } else {
+                        alert('预测失败: ' + data.error);
+                    }
+                    
+                    setTimeout(() => {
+                        btn.className = 'action-button ready';
+                        btn.disabled = false;
+                        statusDot.className = 'status-dot ready';
+                        statusText.textContent = '就绪';
+                        progressContainer.classList.remove('show');
+                    }, 1000);
+                })
+                .catch(error => {
+                    clearInterval(interval);
+                    alert('API调用失败: ' + error.message);
+                    btn.className = 'action-button ready';
+                    btn.disabled = false;
+                    statusDot.className = 'status-dot ready';
+                    statusText.textContent = '就绪';
+                    progressContainer.classList.remove('show');
+                });
+        }
+        
+        function updatePredictionResults(data) {
+            const prediction = data.prediction;
+            const top3 = prediction.top3;
+            const allZodiacs = prediction.all;
+            const recommended = prediction.recommended;
+            const analysis = prediction.analysis;
+            const timestamp = data.timestamp;
+            
+            // 更新时间戳
+            document.querySelector('.header-time').textContent = '预测时间: ' + timestamp;
+            
+            // 更新置信度
+            const confidenceElement = document.querySelector('.confidence-info');
+            confidenceElement.textContent = `置信度: ${prediction.confidence.toFixed(2)}% | 推荐生肖: ${recommended.zodiac_name} (${recommended.wuxing}·${recommended.color})`;
+            
+            const confidenceBar = document.querySelector('.confidence-bar');
+            confidenceBar.style.width = `${prediction.confidence}%`;
+            
+            // 更新Top 3推荐
+            const top3Items = document.querySelectorAll('.top-item');
+            top3Items.forEach((item, index) => {
+                if (top3[index]) {
+                    const zodiac = top3[index];
+                    item.querySelector('.top-name').textContent = zodiac.zodiac_name;
+                    item.querySelector('.top-attrs').textContent = `${zodiac.wuxing}·${zodiac.color}`;
+                    item.querySelector('.top-prob').textContent = `${(zodiac.probability * 100).toFixed(1)}%`;
+                    item.querySelector('.top-bar').style.width = `${(zodiac.probability / top3[0].probability) * 100}%`;
+                }
+            });
+            
+            // 更新分析
+            const analysisList = document.querySelector('.analysis-list');
+            analysisList.innerHTML = '';
+            analysis.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                analysisList.appendChild(li);
+            });
+            
+            // 更新所有生肖概率分布
+            const allItems = document.querySelectorAll('.all-item');
+            allZodiacs.forEach((zodiac, index) => {
+                if (allItems[index]) {
+                    const item = allItems[index];
+                    item.querySelector('.all-name').textContent = zodiac.zodiac_name;
+                    item.querySelector('.all-prob').textContent = `${(zodiac.probability * 100).toFixed(1)}%`;
+                    item.querySelector('.all-bar').style.width = `${(zodiac.probability / top3[0].probability) * 100}%`;
+                    
+                    // 高亮显示Top 3
+                    if (index < 3) {
+                        item.classList.add('highlight');
+                    } else {
+                        item.classList.remove('highlight');
+                    }
+                }
+            });
+            
+            // 添加到历史记录
+            addToHistory(top3, timestamp);
+        }
+        
+        function addToHistory(top3, timestamp) {
+            const historyList = document.querySelector('.history-list');
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item pending';
+            
+            const predictionText = top3.map(z => z.zodiac_name).join('、');
+            
+            historyItem.innerHTML = `
+                <div class="history-header">
+                    <div class="history-info-row">
+                        <div class="history-time">${timestamp}</div>
+                        <span class='period-badge'>期 2026093</span>
+                    </div>
+                    <span class='status-badge pending'>待开奖</span>
+                </div>
+                <div class="history-content">
+                    <div class="history-prediction">
+                        <span class="pred-label">预测:</span>
+                        <span class="pred-value">${predictionText}</span>
+                    </div>
+                    <div class="history-actual">
+                        <span class="actual-label">实际:</span>
+                        <span class="actual-value">-</span>
+                    </div>
+                </div>
+            `;
+            
+            historyList.insertBefore(historyItem, historyList.firstChild);
+            
+            // 重新初始化长按事件
+            initLongPressEvents();
+        }
+        
+        // 长按删除功能
+        let longPressTimer;
+        let selectedHistoryItem = null;
+        const LONG_PRESS_DURATION = 600; // 长按触发时间（毫秒）
+        
+        function initLongPressEvents() {
+            const historyItems = document.querySelectorAll('.history-item');
+            
+            historyItems.forEach(item => {
+                // 鼠标事件
+                item.addEventListener('mousedown', (e) => {
+                    startLongPress(item, e);
+                });
+                
+                item.addEventListener('mouseup', stopLongPress);
+                item.addEventListener('mouseleave', stopLongPress);
+                
+                // 触摸事件（移动设备）
+                item.addEventListener('touchstart', (e) => {
+                    startLongPress(item, e);
+                });
+                
+                item.addEventListener('touchend', stopLongPress);
+                item.addEventListener('touchcancel', stopLongPress);
+            });
+        }
+        
+        function startLongPress(item, e) {
+            e.preventDefault();
+            selectedHistoryItem = item;
+            
+            longPressTimer = setTimeout(() => {
+                // 显示长按效果
+                item.classList.add('long-press');
+                // 显示删除确认对话框
+                showDeleteDialog();
+            }, LONG_PRESS_DURATION);
+        }
+        
+        function stopLongPress() {
+            clearTimeout(longPressTimer);
+            if (selectedHistoryItem) {
+                selectedHistoryItem.classList.remove('long-press');
+            }
+        }
+        
+        function showDeleteDialog() {
+            const dialogOverlay = document.getElementById('deleteDialogOverlay');
+            dialogOverlay.classList.add('show');
+        }
+        
+        function closeDeleteDialog() {
+            const dialogOverlay = document.getElementById('deleteDialogOverlay');
+            dialogOverlay.classList.remove('show');
+            if (selectedHistoryItem) {
+                selectedHistoryItem.classList.remove('long-press');
+            }
+            selectedHistoryItem = null;
+        }
+        
+        function confirmDelete() {
+            if (selectedHistoryItem) {
+                // 从DOM中移除该历史记录项
+                selectedHistoryItem.remove();
+                // 关闭对话框
+                closeDeleteDialog();
+                // 重新加载页面以更新统计信息
+                setTimeout(() => {
+                    location.reload();
+                }, 300);
+            }
+        }
+        
+        // 点击对话框外部关闭
+        document.getElementById('deleteDialogOverlay').addEventListener('click', (e) => {
+            if (e.target.id === 'deleteDialogOverlay') {
+                closeDeleteDialog();
+            }
+        });
+        
+        // 初始化长按事件
+        document.addEventListener('DOMContentLoaded', initLongPressEvents);
+    </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+{
+  "training_date": "2026-04-03 07:45:14",
+  "data_source": "API真实数据 (https://history.macaumarksix.com)",
+  "data_stats": {
+    "total_samples": 794,
+    "train_samples": 635,
+    "test_samples": 159,
+    "n_features": 76
+  },
+  "model_comparison": {
+    "RandomForest": {
+      "accuracy": 1.0,
+      "top3_accuracy": 1.0,
+      "log_loss": 0.22875592168741973,
+      "cv_mean": 1.0,
+      "cv_std": 0.0
+    },
+    "GradientBoosting": {
+      "accuracy": 1.0,
+      "top3_accuracy": 1.0,
+      "log_loss": 4.48360286378972e-08,
+      "cv_mean": 1.0,
+      "cv_std": 0.0
+    }
+  },
+  "best_model": "RandomForest",
+  "best_model_performance": {
+    "accuracy": 1.0,
+    "top3_accuracy": 1.0,
+    "log_loss": 0.22875592168741973
+  },
+  "feature_importance": [
+    {
+      "feature": "element_code",
+      "importance": 0.10896844355550381
+    },
+    {
+      "feature": "color_code",
+      "importance": 0.09094802143413755
+    },
+    {
+      "feature": "zodiac_2_streak",
+      "importance": 0.055663025116629385
+    },
+    {
+      "feature": "zodiac_12_streak",
+      "importance": 0.052872842031388215
+    },
+    {
+      "feature": "zodiac_6_streak",
+      "importance": 0.052741864174207044
+    },
+    {
+      "feature": "zodiac_9_streak",
+      "importance": 0.05189456844084668
+    },
+    {
+      "feature": "zodiac_4_streak",
+      "importance": 0.05184900635588984
+    },
+    {
+      "feature": "zodiac_8_streak",
+      "importance": 0.05161416350948629
+    },
+    {
+      "feature": "zodiac_3_streak",
+      "importance": 0.05125634309008183
+    },
+    {
+      "feature": "zodiac_1_streak",
+      "importance": 0.05108752946127909
+    }
+  ]
+}

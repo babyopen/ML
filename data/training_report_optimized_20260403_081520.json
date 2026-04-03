@@ -1,0 +1,29 @@
+{
+  "training_date": "2026-04-03 08:15:20",
+  "data_source": "lottery_history_recalculated.csv",
+  "data_stats": {
+    "total_samples": 794,
+    "train_samples": 635,
+    "test_samples": 159,
+    "n_features": 114
+  },
+  "model_comparison": {
+    "RandomForest": {
+      "accuracy": 1.0,
+      "top3_accuracy": 1.0
+    },
+    "GradientBoosting": {
+      "accuracy": 1.0,
+      "top3_accuracy": 1.0
+    },
+    "VotingEnsemble": {
+      "accuracy": 1.0,
+      "top3_accuracy": 1.0
+    }
+  },
+  "best_model": "RandomForest",
+  "best_model_performance": {
+    "accuracy": 1.0,
+    "top3_accuracy": 1.0
+  }
+}

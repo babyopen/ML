@@ -1,0 +1,467 @@
+{
+  "generated_at": "2026-04-03 08:19:17",
+  "total_records": 824,
+  "latest_period": 2026092,
+  "latest_zodiac": "牛",
+  "trend_analysis": {
+    "马": {
+      "count": 4,
+      "frequency": 13.33,
+      "expected": 2.5,
+      "deviation": 60.0,
+      "trend": "热"
+    },
+    "蛇": {
+      "count": 2,
+      "frequency": 6.67,
+      "expected": 2.5,
+      "deviation": -20.0,
+      "trend": "正常"
+    },
+    "龙": {
+      "count": 3,
+      "frequency": 10.0,
+      "expected": 2.5,
+      "deviation": 20.0,
+      "trend": "正常"
+    },
+    "兔": {
+      "count": 2,
+      "frequency": 6.67,
+      "expected": 2.5,
+      "deviation": -20.0,
+      "trend": "正常"
+    },
+    "虎": {
+      "count": 5,
+      "frequency": 16.67,
+      "expected": 2.5,
+      "deviation": 100.0,
+      "trend": "热"
+    },
+    "牛": {
+      "count": 2,
+      "frequency": 6.67,
+      "expected": 2.5,
+      "deviation": -20.0,
+      "trend": "正常"
+    },
+    "鼠": {
+      "count": 1,
+      "frequency": 3.33,
+      "expected": 2.5,
+      "deviation": -60.0,
+      "trend": "冷"
+    },
+    "猪": {
+      "count": 0,
+      "frequency": 0.0,
+      "expected": 2.5,
+      "deviation": -100.0,
+      "trend": "冷"
+    },
+    "狗": {
+      "count": 1,
+      "frequency": 3.33,
+      "expected": 2.5,
+      "deviation": -60.0,
+      "trend": "冷"
+    },
+    "鸡": {
+      "count": 4,
+      "frequency": 13.33,
+      "expected": 2.5,
+      "deviation": 60.0,
+      "trend": "热"
+    },
+    "猴": {
+      "count": 2,
+      "frequency": 6.67,
+      "expected": 2.5,
+      "deviation": -20.0,
+      "trend": "正常"
+    },
+    "羊": {
+      "count": 4,
+      "frequency": 13.33,
+      "expected": 2.5,
+      "deviation": 60.0,
+      "trend": "热"
+    }
+  },
+  "cycle_analysis": {
+    "马": {
+      "total_occurrences": 67,
+      "avg_interval": 12.36,
+      "std_interval": 10.56,
+      "last_seen": 822,
+      "predicted_next": 834,
+      "periods_until_predicted": 11,
+      "confidence": "低"
+    },
+    "蛇": {
+      "total_occurrences": 65,
+      "avg_interval": 12.62,
+      "std_interval": 12.53,
+      "last_seen": 818,
+      "predicted_next": 830,
+      "periods_until_predicted": 7,
+      "confidence": "低"
+    },
+    "龙": {
+      "total_occurrences": 77,
+      "avg_interval": 10.46,
+      "std_interval": 9.17,
+      "last_seen": 819,
+      "predicted_next": 829,
+      "periods_until_predicted": 6,
+      "confidence": "中"
+    },
+    "兔": {
+      "total_occurrences": 63,
+      "avg_interval": 13.11,
+      "std_interval": 11.89,
+      "last_seen": 815,
+      "predicted_next": 828,
+      "periods_until_predicted": 5,
+      "confidence": "低"
+    },
+    "虎": {
+      "total_occurrences": 73,
+      "avg_interval": 11.1,
+      "std_interval": 10.93,
+      "last_seen": 814,
+      "predicted_next": 825,
+      "periods_until_predicted": 2,
+      "confidence": "低"
+    },
+    "牛": {
+      "total_occurrences": 69,
+      "avg_interval": 12.04,
+      "std_interval": 12.02,
+      "last_seen": 823,
+      "predicted_next": 835,
+      "periods_until_predicted": 12,
+      "confidence": "低"
+    },
+    "鼠": {
+      "total_occurrences": 78,
+      "avg_interval": 10.6,
+      "std_interval": 10.04,
+      "last_seen": 816,
+      "predicted_next": 826,
+      "periods_until_predicted": 3,
+      "confidence": "低"
+    },
+    "猪": {
+      "total_occurrences": 51,
+      "avg_interval": 14.94,
+      "std_interval": 12.23,
+      "last_seen": 748,
+      "predicted_next": 762,
+      "periods_until_predicted": -61,
+      "confidence": "低"
+    },
+    "狗": {
+      "total_occurrences": 66,
+      "avg_interval": 12.35,
+      "std_interval": 11.36,
+      "last_seen": 806,
+      "predicted_next": 818,
+      "periods_until_predicted": -5,
+      "confidence": "低"
+    },
+    "鸡": {
+      "total_occurrences": 69,
+      "avg_interval": 11.78,
+      "std_interval": 10.62,
+      "last_seen": 809,
+      "predicted_next": 820,
+      "periods_until_predicted": -3,
+      "confidence": "低"
+    },
+    "猴": {
+      "total_occurrences": 66,
+      "avg_interval": 12.03,
+      "std_interval": 11.07,
+      "last_seen": 810,
+      "predicted_next": 822,
+      "periods_until_predicted": -1,
+      "confidence": "低"
+    },
+    "羊": {
+      "total_occurrences": 80,
+      "avg_interval": 10.24,
+      "std_interval": 9.32,
+      "last_seen": 821,
+      "predicted_next": 831,
+      "periods_until_predicted": 8,
+      "confidence": "中"
+    }
+  },
+  "miss_analysis": {
+    "马": {
+      "current_miss": 1,
+      "max_miss": 55,
+      "avg_miss": 11.36,
+      "miss_ratio": 1.82,
+      "alert": "低"
+    },
+    "蛇": {
+      "current_miss": 5,
+      "max_miss": 60,
+      "avg_miss": 11.62,
+      "miss_ratio": 8.33,
+      "alert": "低"
+    },
+    "龙": {
+      "current_miss": 4,
+      "max_miss": 59,
+      "avg_miss": 9.46,
+      "miss_ratio": 6.78,
+      "alert": "低"
+    },
+    "兔": {
+      "current_miss": 8,
+      "max_miss": 58,
+      "avg_miss": 12.11,
+      "miss_ratio": 13.79,
+      "alert": "低"
+    },
+    "虎": {
+      "current_miss": 9,
+      "max_miss": 70,
+      "avg_miss": 10.1,
+      "miss_ratio": 12.86,
+      "alert": "低"
+    },
+    "牛": {
+      "current_miss": 0,
+      "max_miss": 68,
+      "avg_miss": 11.04,
+      "miss_ratio": 0.0,
+      "alert": "低"
+    },
+    "鼠": {
+      "current_miss": 7,
+      "max_miss": 55,
+      "avg_miss": 9.6,
+      "miss_ratio": 12.73,
+      "alert": "低"
+    },
+    "猪": {
+      "current_miss": 75,
+      "max_miss": 55,
+      "avg_miss": 13.94,
+      "miss_ratio": 136.36,
+      "alert": "高"
+    },
+    "狗": {
+      "current_miss": 17,
+      "max_miss": 44,
+      "avg_miss": 11.35,
+      "miss_ratio": 38.64,
+      "alert": "低"
+    },
+    "鸡": {
+      "current_miss": 14,
+      "max_miss": 39,
+      "avg_miss": 10.78,
+      "miss_ratio": 35.9,
+      "alert": "低"
+    },
+    "猴": {
+      "current_miss": 13,
+      "max_miss": 64,
+      "avg_miss": 11.03,
+      "miss_ratio": 20.31,
+      "alert": "低"
+    },
+    "羊": {
+      "current_miss": 2,
+      "max_miss": 43,
+      "avg_miss": 9.24,
+      "miss_ratio": 4.65,
+      "alert": "低"
+    }
+  },
+  "consecutive_analysis": {
+    "马": {
+      "max_streak": 2,
+      "current_streak": 0,
+      "avg_streak": 1.06,
+      "total_streaks": 63,
+      "is_hot": false
+    },
+    "蛇": {
+      "max_streak": 2,
+      "current_streak": 0,
+      "avg_streak": 1.1,
+      "total_streaks": 59,
+      "is_hot": false
+    },
+    "龙": {
+      "max_streak": 2,
+      "current_streak": 0,
+      "avg_streak": 1.07,
+      "total_streaks": 72,
+      "is_hot": false
+    },
+    "兔": {
+      "max_streak": 2,
+      "current_streak": 0,
+      "avg_streak": 1.07,
+      "total_streaks": 59,
+      "is_hot": false
+    },
+    "虎": {
+      "max_streak": 2,
+      "current_streak": 0,
+      "avg_streak": 1.07,
+      "total_streaks": 68,
+      "is_hot": false
+    },
+    "牛": {
+      "max_streak": 2,
+      "current_streak": 1,
+      "avg_streak": 1.05,
+      "total_streaks": 65,
+      "is_hot": false
+    },
+    "鼠": {
+      "max_streak": 2,
+      "current_streak": 0,
+      "avg_streak": 1.05,
+      "total_streaks": 74,
+      "is_hot": false
+    },
+    "猪": {
+      "max_streak": 2,
+      "current_streak": 0,
+      "avg_streak": 1.06,
+      "total_streaks": 48,
+      "is_hot": false
+    },
+    "狗": {
+      "max_streak": 2,
+      "current_streak": 0,
+      "avg_streak": 1.08,
+      "total_streaks": 61,
+      "is_hot": false
+    },
+    "鸡": {
+      "max_streak": 3,
+      "current_streak": 0,
+      "avg_streak": 1.13,
+      "total_streaks": 61,
+      "is_hot": false
+    },
+    "猴": {
+      "max_streak": 2,
+      "current_streak": 0,
+      "avg_streak": 1.05,
+      "total_streaks": 63,
+      "is_hot": false
+    },
+    "羊": {
+      "max_streak": 2,
+      "current_streak": 0,
+      "avg_streak": 1.14,
+      "total_streaks": 70,
+      "is_hot": false
+    }
+  },
+  "pattern_analysis": {
+    "top_patterns": [
+      [
+        [
+          "鼠",
+          "马",
+          "虎"
+        ],
+        4
+      ],
+      [
+        [
+          "鼠",
+          "马",
+          "马"
+        ],
+        3
+      ],
+      [
+        [
+          "鸡",
+          "猴",
+          "龙"
+        ],
+        3
+      ],
+      [
+        [
+          "羊",
+          "鸡",
+          "鸡"
+        ],
+        3
+      ],
+      [
+        [
+          "猴",
+          "羊",
+          "蛇"
+        ],
+        3
+      ],
+      [
+        [
+          "羊",
+          "蛇",
+          "狗"
+        ],
+        3
+      ],
+      [
+        [
+          "兔",
+          "龙",
+          "鼠"
+        ],
+        3
+      ],
+      [
+        [
+          "羊",
+          "鸡",
+          "牛"
+        ],
+        3
+      ],
+      [
+        [
+          "鸡",
+          "狗",
+          "虎"
+        ],
+        3
+      ],
+      [
+        [
+          "羊",
+          "牛",
+          "鸡"
+        ],
+        3
+      ]
+    ],
+    "current_pattern": [
+      "马",
+      "牛"
+    ],
+    "predictions": {
+      "龙": 1,
+      "羊": 1,
+      "蛇": 1
+    }
+  }
+}
