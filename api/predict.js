@@ -1,5 +1,6 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { execSync } from 'child_process';
 
 // 加载模型和数据
 function loadModel() {
@@ -23,7 +24,6 @@ function predict() {
     const { modelPath, dataPath } = loadModel();
     
     // 由于Vercel的限制，我们使用Python来处理预测
-    const { execSync } = require('child_process');
     
     // 创建临时预测脚本
     const predictScript = `

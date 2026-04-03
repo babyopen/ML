@@ -2,6 +2,7 @@
   "name": "zodiac-predictor",
   "version": "1.0.0",
   "description": "生肖预测模型部署在Vercel平台",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "dev": "vercel dev",
