@@ -1,7 +1,7 @@
 {
   "name": "zodiac-predictor",
   "version": "1.0.0",
-  "description": "生肖预测模型部署在Vercel平台",
+  "description": "生肖预测模型",
   "type": "module",
   "main": "index.js",
   "scripts": {
@@ -10,8 +10,7 @@
   "keywords": [
     "machine-learning",
     "predictor",
-    "zodiac",
-    "vercel"
+    "zodiac"
   ],
   "author": "",
   "license": "MIT"
